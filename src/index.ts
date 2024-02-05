@@ -4,18 +4,18 @@ import { greetUser } from '$utils/greet';
 window.Webflow ||= [];
 window.Webflow.push(() => {
   const display = document.querySelector(`[chordPro="display"]`);
+  const transpose = $('.transpose .transpose-level').data('transpose');
   const chordProData = document
     .querySelector(`[chordPro="song"]`)
     ?.innerHTML.replace(/<\/?p>/g, '\n');
   if (!display || !chordProData) return;
   console.log(chordProData);
 
-  updateDisplay(chordProData, display);
+  updateDisplay(chordProData, display, transpose);
   // const chordProData =
 });
 
-function updateDisplay(chordProData, display) {
-  const transpose = $('.transpose .transpose-level').data('transpose');
+export function updateDisplay(chordProData, display, transpose) {
   const html = parseChordPro(chordProData, transpose);
   display.innerHTML = html;
 }

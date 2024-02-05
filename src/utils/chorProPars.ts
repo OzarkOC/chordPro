@@ -1,4 +1,9 @@
-'use strict';
+import { updateDisplay } from '../index';
+('use strict');
+const display = document.querySelector(`[chordPro="display"]`);
+const chordProData = document
+  .querySelector(`[chordPro="song"]`)
+  ?.innerHTML.replace(/<\/?p>/g, '\n');
 /*
  * Copyright (c) 2014-16 Greg Schoppe <gschoppe@gmail.com>
  * Copyright (c) 2011 Jonathan Perkin <jonathan@perkin.org.uk>
@@ -123,10 +128,10 @@ export function parseChordPro(template, transpose) {
         buffer.push('</div><div class="command_block">');
       }
 
-      const matches = line.match(/^{(title|t|subtitle|st|comment|c):\s*(.*)}/i);
+      const matches = line.match(/^{(title|t|subtitle|st|comment|c|key):\s*(.*)}/i);
       if (matches && matches.length >= 3) {
-        const command = matches[1];
-        const text = matches[2];
+        let command = matches[1];
+        let text = matches[2];
         let wrap = '';
 
         switch (command) {
@@ -141,6 +146,11 @@ export function parseChordPro(template, transpose) {
           case 'comment':
           case 'c':
             wrap = 'em';
+            break;
+          case 'key':
+            wrap = 'span';
+            text = `Key: ${text}`;
+            command = 'key';
             break;
         }
 
@@ -160,28 +170,30 @@ export function parseChordPro(template, transpose) {
 
 document.addEventListener('DOMContentLoaded', function () {
   const the_timeout = '';
-  const textarea = document.querySelector('textarea');
+  //   const textarea = document.querySelector('textarea');
   const renderingTarget = document.querySelector('.rendering-target');
   const transposeLevel = document.querySelector('.transpose .transpose-level');
+  const template = display.textContent;
 
-  //   textarea.addEventListener('keyup', function () {
-  //     clearTimeout(the_timeout);
-  //     the_timeout = setTimeout(function () {
-  //       const template = textarea.value;
-  //       const transpose = parseInt(transposeLevel.dataset.transpose) || 0;
-  //       const html = parseChordPro(template, transpose);
-  //       renderingTarget.innerHTML = html;
-  //     }, 10);
-  //   });
+  // display.addEventListener('keyup', function () {
+  //   clearTimeout(the_timeout);
+  //   the_timeout = setTimeout(function () {
+
+  //     const transpose = parseInt(transposeLevel.dataset.transpose) || 0;
+  //     // const html = parseChordPro(template, transpose);
+  //     renderingTarget.innerHTML = html;
+  //   }, 10);
+  // });
 
   document.querySelector('.transpose .transpose-up').addEventListener('click', function (e) {
     e.preventDefault();
     const oldVal = parseInt(transposeLevel.dataset.transpose) || 0;
     const newVal = oldVal + 1;
     transposeLevel.dataset.transpose = newVal;
+
     const newText = (newVal > 0 ? '+' : '') + newVal;
     transposeLevel.innerHTML = newText;
-    textarea.dispatchEvent(new Event('keyup'));
+    updateDisplay(chordProData, display, newVal);
   });
 
   document.querySelector('.transpose .transpose-down').addEventListener('click', function (e) {
@@ -191,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
     transposeLevel.dataset.transpose = newVal;
     const newText = (newVal > 0 ? '+' : '') + newVal;
     transposeLevel.innerHTML = newText;
-    textarea.dispatchEvent(new Event('keyup'));
+    updateDisplay(chordProData, display, newVal);
   });
 });
 
