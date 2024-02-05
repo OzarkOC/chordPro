@@ -1,11 +1,11 @@
 {
-  "extends": "@finsweet/tsconfig",
+  "extends": "@ozarkoc/tsconfig",
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": "./",
     "paths": {
       "$utils/*": ["src/utils/*"]
     },
-    "types": ["@finsweet/ts-utils"]
+    "types": ["@ozarkoc/ts-utils"]
   }
 }
