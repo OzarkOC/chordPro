@@ -3,6 +3,7 @@ import { greetUser } from '$utils/greet';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  console.log('Hey Friend!');
   const display = document.querySelector(`[chordPro="display"]`);
   const transpose = $('.transpose .transpose-level').data('transpose');
   const chordProData = document
