@@ -1,5 +1,5 @@
 ---
-'@ozarkoc/chordPro': patch
+'@finsweet/developer-starter': patch
 ---
 
 First Launch
